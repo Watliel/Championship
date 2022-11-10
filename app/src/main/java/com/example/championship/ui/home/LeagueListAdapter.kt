@@ -45,7 +45,6 @@ class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder
                 itemClickListener.onClick(league)
             }
         }
-
     }
 
     override fun getItemCount(): Int {
@@ -61,7 +60,6 @@ class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder
             this.itemView.findViewById<View>(itemView.id)
             leagueLogo = itemView.findViewById(R.id.row_league_logo)
         }
-
 
     }
 
@@ -83,13 +81,11 @@ class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder
                         }
                         .forEach { filteredList.add(it) }
                     filteredList
-
                 }
                 return FilterResults().apply { values = leaguesFiltered }
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-
                 leaguesFiltered = if (results?.values == null)
                     ArrayList()
                 else

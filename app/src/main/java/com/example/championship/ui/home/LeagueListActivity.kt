@@ -3,6 +3,7 @@ package com.example.championship.ui.home
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -37,6 +38,12 @@ class LeagueListActivity : AppCompatActivity() {
     private fun observeViewModel() {
         leagueListViewModel.allLeagues.observe(this, Observer { leagues ->
             leagues?.let { leagueAdapter.updateLeagueList(it) }
+        })
+        leagueListViewModel.loading.observe(this, Observer { isLoading ->
+            isLoading?.let { leagueListActivityBinding.leagueListLoading.visibility = if(it) View.VISIBLE else View.GONE }
+        })
+        leagueListViewModel.loading.observe(this, Observer { isError ->
+            isError?.let {  }
         })
     }
 
