@@ -28,6 +28,10 @@ class LeagueListActivity : AppCompatActivity() {
         leagueAdapter.setItemClickListener(object: LeagueListAdapter.ItemClickListener{
             override fun onClick(league: League?) {
                 Log.d("CLICK", league?.name.toString())
+                val r = league?.name.toString().replace(" ", "_")
+                Log.d("CLICK", r)
+
+                leagueListViewModel.getLeaguesByNames(r)
                 //TODO redirect
             }
         })
@@ -42,8 +46,8 @@ class LeagueListActivity : AppCompatActivity() {
         leagueListViewModel.loading.observe(this, Observer { isLoading ->
             isLoading?.let { leagueListActivityBinding.leagueListLoading.visibility = if(it) View.VISIBLE else View.GONE }
         })
-        leagueListViewModel.loading.observe(this, Observer { isError ->
-            isError?.let {  }
+        leagueListViewModel.leagueLoadError.observe(this, Observer { isError ->
+            isError?.let { leagueListActivityBinding.leagueListOnError.visibility = if(it) View.VISIBLE else View.GONE }
         })
     }
 

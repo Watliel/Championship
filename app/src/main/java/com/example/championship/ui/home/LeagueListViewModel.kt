@@ -32,9 +32,29 @@ class LeagueListViewModel: ViewModel() {
         }
     }
 
+    fun getLeaguesByNames(name: String) {
+        loading.value = true
+        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+            val res = NetworkProvider.buildService(LeagueService::class.java).getTeamsByLeagueName(name)
+            withContext(Dispatchers.Main) {
+                loading.value = false
+                if (res.isSuccessful) {
+                   // allLeagues.value = LeagueMapper.mapLeagueDTOList(res.body()?.leagues)
+                    Log.d("YIPIKAY", res.toString())
+
+                    val tr = res.body()
+                    Log.d("YIPIKAY", tr.toString())
+
+                } else {
+                    onError("Error: ${res.message()}")
+                    Log.d("ERROR - LieagueList", res.message())
+                }
+            }
+        }
+    }
     private fun onError(message: String) {
-        leagueLoadError.value = true
-        loading.value = false
+        leagueLoadError.postValue(true)
+        loading.postValue(false)
         Log.d("onError LeagueViewModel", message)
     }
 
