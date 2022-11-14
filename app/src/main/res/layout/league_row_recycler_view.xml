@@ -16,5 +16,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ProgressBar
+        android:id="@+id/row_image_loader"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

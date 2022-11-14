@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.LeagueListActivity">
 
+    <include
+        android:id="@+id/league_list_toolbar"
+        layout="@layout/toolbar"/>
     <ProgressBar
         android:id="@+id/league_list_loading"
         android:layout_width="40dp"
@@ -31,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:scrollbars="vertical"
-        android:layout_below="@id/league_list_search_view"
+        android:layout_below="@id/league_list_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

@@ -1,42 +1,55 @@
 package com.example.championship.ui.home
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.championship.R
 import com.example.championship.databinding.LeagueListActivityBinding
 import com.example.championship.models.League
+import com.example.championship.models.Team
 
 class LeagueListActivity : AppCompatActivity() {
     private lateinit var leagueListViewModel: LeagueListViewModel
     private lateinit var leagueListActivityBinding: LeagueListActivityBinding
     private lateinit var leagueAdapter: LeagueListAdapter
+    private lateinit var teamAdapter: TeamListAdapter
+    private lateinit var toolbarListAct: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.league_list_activity)
         leagueListViewModel = ViewModelProvider(this)[LeagueListViewModel::class.java]
         leagueListActivityBinding = LeagueListActivityBinding.inflate(layoutInflater)
         setContentView(leagueListActivityBinding.root)
+        toolbarListAct = findViewById(R.id.league_list_toolbar)
+        toolbarListAct.title = ""
+        setSupportActionBar(toolbarListAct)
         initRecyclerView()
+        initRecyclerViewTeam()
         leagueListViewModel.getLeagues()
 
         leagueAdapter.setItemClickListener(object: LeagueListAdapter.ItemClickListener{
             override fun onClick(league: League?) {
-                Log.d("CLICK", league?.name.toString())
-                val r = league?.name.toString().replace(" ", "_")
-                Log.d("CLICK", r)
-
-                leagueListViewModel.getLeaguesByNames(r)
-                //TODO redirect
+                val leagueNameSelected = league?.name.toString().replace(" ", "_")
+                leagueListViewModel.getLeaguesByNames(leagueNameSelected)
             }
         })
-        observeViewModel()
 
+        teamAdapter.setItemClickListener(object: TeamListAdapter.ItemClickListener{
+            override fun onClick(Team: Team?) {
+
+            }
+        })
+
+        observeViewModel()
     }
 
     private fun observeViewModel() {
@@ -49,6 +62,14 @@ class LeagueListActivity : AppCompatActivity() {
         leagueListViewModel.leagueLoadError.observe(this, Observer { isError ->
             isError?.let { leagueListActivityBinding.leagueListOnError.visibility = if(it) View.VISIBLE else View.GONE }
         })
+        leagueListViewModel.teamsInLeague.observe(this, Observer { teams ->
+            teams?.let {
+                leagueListActivityBinding.leagueListSearchView.visibility = View.GONE
+                // toolbarListAct.menu.getItem(R.id.toolbar_menu_back).isVisible = true TODO fix IT
+                leagueListActivityBinding.leagueListRecyclerView.adapter = teamAdapter
+                teamAdapter.updateTeamList(it)
+            }
+        })
     }
 
     private fun initRecyclerView() {
@@ -56,7 +77,33 @@ class LeagueListActivity : AppCompatActivity() {
         leagueAdapter = LeagueListAdapter()
         leagueListActivityBinding.leagueListRecyclerView.adapter = leagueAdapter;
     }
-/*
+
+    private fun initRecyclerViewTeam() {
+        leagueListActivityBinding.leagueListRecyclerView.layoutManager = GridLayoutManager(this@LeagueListActivity, 2)
+        teamAdapter = TeamListAdapter()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.toolbar_menu_back -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        leagueListActivityBinding.leagueListRecyclerView.adapter = leagueAdapter;
+    }
+
+
+    /*
     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             // on below line we are checking

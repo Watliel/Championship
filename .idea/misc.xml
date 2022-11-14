@@ -6,6 +6,8 @@
         <entry key="app/src/main/res/layout/home_main.xml" value="0.35643115942028986" />
         <entry key="app/src/main/res/layout/league_list_activity.xml" value="0.35643115942028986" />
         <entry key="app/src/main/res/layout/league_row_recycler_view.xml" value="0.35643115942028986" />
+        <entry key="app/src/main/res/layout/toolbar.xml" value="0.184375" />
+        <entry key="app/src/main/res/menu/toolbar_menu.xml" value="0.35989583333333336" />
       </map>
     </option>
   </component>

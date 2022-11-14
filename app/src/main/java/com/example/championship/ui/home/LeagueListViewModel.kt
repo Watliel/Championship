@@ -4,13 +4,17 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.championship.mappers.LeagueMapper
+import com.example.championship.mappers.TeamMapper
 import com.example.championship.models.League
+import com.example.championship.models.Team
 import com.example.championship.services.LeagueService
 import com.example.championship.services.NetworkProvider
 import kotlinx.coroutines.*
 
 class LeagueListViewModel: ViewModel() {
     var allLeagues = MutableLiveData<List<League>>()
+    var teamsInLeague = MutableLiveData<List<Team>>()
+
     var loading = MutableLiveData<Boolean>()
     var leagueLoadError = MutableLiveData<Boolean>()
     private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable -> onError("Exception ${throwable.localizedMessage}") }
@@ -39,12 +43,7 @@ class LeagueListViewModel: ViewModel() {
             withContext(Dispatchers.Main) {
                 loading.value = false
                 if (res.isSuccessful) {
-                   // allLeagues.value = LeagueMapper.mapLeagueDTOList(res.body()?.leagues)
-                    Log.d("YIPIKAY", res.toString())
-
-                    val tr = res.body()
-                    Log.d("YIPIKAY", tr.toString())
-
+                   teamsInLeague.value = TeamMapper.mapTeamDTOList(res.body()?.teams)
                 } else {
                     onError("Error: ${res.message()}")
                     Log.d("ERROR - LieagueList", res.message())
