@@ -4,13 +4,14 @@ data class Team(
     val name: String?,
     val banner: String?,
     val description: String?,
-    val championship: String?,
+    val league: String?,
     val logo: String?,
     val badge: String?,
+    val country: String?,
     val teamId: String?
 )
 
-object oneTeam {
+object OneTeam {
 
     init {
     }

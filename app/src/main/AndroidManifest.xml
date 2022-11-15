@@ -16,11 +16,9 @@
         android:theme="@style/Theme.Championship"
         tools:targetApi="31">
         <activity
-            android:name=".DetailTeam"
+            android:name=".ui.teamDetail.DetailTeam"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+
         <activity
             android:name="com.example.championship.ui.home.LeagueListActivity"
             android:exported="true">

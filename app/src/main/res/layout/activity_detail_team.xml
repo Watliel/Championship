@@ -1,9 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.teamDetail.DetailTeam">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/detail_team_toolbar"
+            layout="@layout/toolbar" />
+
+        <ImageView
+            android:id="@+id/detail_team_banner"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_margin="10dp"
+            android:contentDescription="@string/team_banner"
+            app:layout_constraintTop_toBottomOf="@+id/detail_team_toolbar" />
+
+        <TextView
+            android:id="@+id/detail_team_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/country"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@+id/detail_team_banner"
+            app:layout_constraintTop_toBottomOf="@+id/detail_team_banner" />
+
+        <TextView
+            android:id="@+id/detail_team_league"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/team_name"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintStart_toStartOf="@+id/detail_team_banner"
+            app:layout_constraintTop_toBottomOf="@+id/detail_team_country" />
+
+        <TextView
+            android:id="@+id/detail_team_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/detail_team_league" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

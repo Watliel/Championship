@@ -3,4 +3,7 @@
     <string name="logo_description">Logo of the League</string>
     <string name="no_internet">No Internet Found</string>
     <string name="toolbar_back">Back</string>
+    <string name="team_banner">Team\'s banner</string>
+    <string name="team_name">Team Name</string>
+    <string name="country">Country</string>
 </resources>

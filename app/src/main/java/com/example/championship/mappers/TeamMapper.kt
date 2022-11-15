@@ -18,10 +18,11 @@ class TeamMapper {
                 teamDTO?.name,
                 teamDTO?.banner,
                 teamDTO?.description,
-                teamDTO?.championship,
+                teamDTO?.league,
                 teamDTO?.logo,
                 teamDTO?.badge,
-                teamDTO?.teamId,
+                teamDTO?.country,
+                teamDTO?.teamId
             )
         }
     }

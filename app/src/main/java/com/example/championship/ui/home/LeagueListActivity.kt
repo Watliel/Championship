@@ -1,13 +1,11 @@
 package com.example.championship.ui.home
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +14,7 @@ import com.example.championship.R
 import com.example.championship.databinding.LeagueListActivityBinding
 import com.example.championship.models.League
 import com.example.championship.models.Team
+import com.example.championship.ui.teamDetail.DetailTeam
 
 class LeagueListActivity : AppCompatActivity() {
     private lateinit var leagueListViewModel: LeagueListViewModel
@@ -71,6 +70,10 @@ class LeagueListActivity : AppCompatActivity() {
                 teamAdapter.updateTeamList(it)
             }
         })
+        leagueListViewModel.teamDetailLoaded.observe(this) {
+            val intent = Intent(this@LeagueListActivity, DetailTeam::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initRecyclerView() {

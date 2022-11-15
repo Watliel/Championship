@@ -9,6 +9,8 @@ data class TeamDTO(
     @SerializedName("strTeamBadge") var badge: String,
     @SerializedName("strDescriptionEN") var description: String?,
     @SerializedName("strTeamBanner") var banner: String?,
-    @SerializedName("strChampionShip") var championship: String?
+    @SerializedName("strLeague") var league: String?,
+    @SerializedName("strCountry") var country: String?
+
 
 )

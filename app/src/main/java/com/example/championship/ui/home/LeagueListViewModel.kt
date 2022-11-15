@@ -7,7 +7,7 @@ import com.example.championship.mappers.LeagueMapper
 import com.example.championship.mappers.TeamMapper
 import com.example.championship.models.League
 import com.example.championship.models.Team
-import com.example.championship.models.oneTeam
+import com.example.championship.models.OneTeam
 import com.example.championship.services.LeagueService
 import com.example.championship.services.NetworkProvider
 import com.example.championship.services.TeamService
@@ -19,6 +19,8 @@ class LeagueListViewModel: ViewModel() {
 
     var loading = MutableLiveData<Boolean>()
     var leagueLoadError = MutableLiveData<Boolean>()
+    var teamDetailLoaded = MutableLiveData<Boolean>()
+
     private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable -> onError("Exception ${throwable.localizedMessage}") }
     var job: Job? = null
 
@@ -63,8 +65,8 @@ class LeagueListViewModel: ViewModel() {
                 loading.value = false
                 if (res.isSuccessful) {
                     val team = res.body()?.teams?.get(0)
-                    oneTeam.team = TeamMapper.mapTeamDTO(team)
-                    Log.d("DETAIL", oneTeam.team.toString())
+                    OneTeam.team = TeamMapper.mapTeamDTO(team)
+                    teamDetailLoaded.value = true
                 } else {
                     onError("Error: ${res.message()}")
                     Log.d("ERROR - geTeamDetail", res.message())
