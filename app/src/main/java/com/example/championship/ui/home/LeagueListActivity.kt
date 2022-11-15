@@ -39,13 +39,14 @@ class LeagueListActivity : AppCompatActivity() {
         leagueAdapter.setItemClickListener(object: LeagueListAdapter.ItemClickListener{
             override fun onClick(league: League?) {
                 val leagueNameSelected = league?.name.toString().replace(" ", "_")
-                leagueListViewModel.getLeaguesByNames(leagueNameSelected)
+                leagueListViewModel.geTeamsLeaguesByNames(leagueNameSelected)
             }
         })
 
         teamAdapter.setItemClickListener(object: TeamListAdapter.ItemClickListener{
-            override fun onClick(Team: Team?) {
-
+            override fun onClick(team: Team?) {
+                val teamNameSelected = team?.name.toString().replace(" ", "_")
+                team?.let { leagueListViewModel.geTeamDetail(teamNameSelected) }
             }
         })
 
@@ -65,7 +66,7 @@ class LeagueListActivity : AppCompatActivity() {
         leagueListViewModel.teamsInLeague.observe(this, Observer { teams ->
             teams?.let {
                 leagueListActivityBinding.leagueListSearchView.visibility = View.GONE
-                // toolbarListAct.menu.getItem(R.id.toolbar_menu_back).isVisible = true TODO fix IT
+                // toolbarListAct.menu.getItem(R.id.toolbar_menu_back).isVisible = true
                 leagueListActivityBinding.leagueListRecyclerView.adapter = teamAdapter
                 teamAdapter.updateTeamList(it)
             }
@@ -99,6 +100,7 @@ class LeagueListActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        leagueListActivityBinding.leagueListSearchView.visibility = View.VISIBLE
         leagueListActivityBinding.leagueListRecyclerView.adapter = leagueAdapter;
     }
 

@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkProvider {
 
-    const val BASE_URL = "https://www.thesportsdb.com/api/v1/json/50130162/"
+    private const val BASE_URL = "https://www.thesportsdb.com/api/v1/json/50130162/"
     var leagueService: LeagueService
 
     var retrofit: Retrofit = Retrofit.Builder()
@@ -26,14 +26,10 @@ object NetworkProvider {
         return retrofit.create(service)
     }
 /*
-    suspend fun getBlog(): Flow<DataState<List<League>>> = flow {
-        val networkBlogs = leagueService.getAllLeagues()
-        val blogs = blogMapper.mapFromEntityList(networkBlogs)
-        for (blog in blogs) {
-            blogDao.insert(cacheMapper.mapToEntity(blog))
-        }
-        val cachedBlogs = blogDao.get()
-        emit(DataState.Success(cacheMapper.mapFromEntityList(cachedBlogs)))
+    suspend fun getLeague(): Flow<DataState<List<League>>> = flow {
+        val alLeagues = leagueService.getAllLeagues()
+        val leagues = leagueMapper.mapFromEntityList(alLeagues)
+        emit(DataState.Success(cacheMapper.mapFromEntityList(leagues)))
     } catch (e: Exception) {
         emit(DataState.Error(e))
     }

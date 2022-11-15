@@ -7,8 +7,10 @@ import com.example.championship.mappers.LeagueMapper
 import com.example.championship.mappers.TeamMapper
 import com.example.championship.models.League
 import com.example.championship.models.Team
+import com.example.championship.models.oneTeam
 import com.example.championship.services.LeagueService
 import com.example.championship.services.NetworkProvider
+import com.example.championship.services.TeamService
 import kotlinx.coroutines.*
 
 class LeagueListViewModel: ViewModel() {
@@ -36,21 +38,41 @@ class LeagueListViewModel: ViewModel() {
         }
     }
 
-    fun getLeaguesByNames(name: String) {
+    fun geTeamsLeaguesByNames(name: String) {
         loading.value = true
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val res = NetworkProvider.buildService(LeagueService::class.java).getTeamsByLeagueName(name)
+            val res = NetworkProvider.buildService(TeamService::class.java).getTeamsByLeagueName(name)
             withContext(Dispatchers.Main) {
                 loading.value = false
                 if (res.isSuccessful) {
-                   teamsInLeague.value = TeamMapper.mapTeamDTOList(res.body()?.teams)
+                    val teams = TeamMapper.mapTeamDTOList(res.body()?.teams)
+                   teamsInLeague.value = teams.filterIndexed { index, _ -> index % 2 == 0 }.sortedByDescending { it.name }
                 } else {
                     onError("Error: ${res.message()}")
-                    Log.d("ERROR - LieagueList", res.message())
+                    Log.d("ERROR - LeagueList", res.message())
                 }
             }
         }
     }
+
+    fun geTeamDetail(name: String) {
+        loading.value = true
+        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+            val res = NetworkProvider.buildService(TeamService::class.java).geTeamDetail(name)
+            withContext(Dispatchers.Main) {
+                loading.value = false
+                if (res.isSuccessful) {
+                    val team = res.body()?.teams?.get(0)
+                    oneTeam.team = TeamMapper.mapTeamDTO(team)
+                    Log.d("DETAIL", oneTeam.team.toString())
+                } else {
+                    onError("Error: ${res.message()}")
+                    Log.d("ERROR - geTeamDetail", res.message())
+                }
+            }
+        }
+    }
+
     private fun onError(message: String) {
         leagueLoadError.postValue(true)
         loading.postValue(false)

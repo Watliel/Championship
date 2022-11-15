@@ -17,7 +17,7 @@ import com.example.championship.models.Team
 
 
 class TeamListAdapter : RecyclerView.Adapter<TeamListAdapter.TeamViewHolder>() {
-    private var allTeams: MutableList<Team?> = ArrayList<Team?>()
+    private var allTeams: MutableList<Team?> = ArrayList()
 
     private lateinit var itemClickListener: ItemClickListener
 
@@ -97,7 +97,7 @@ class TeamListAdapter : RecyclerView.Adapter<TeamListAdapter.TeamViewHolder>() {
     }
 
     interface ItemClickListener {
-        fun onClick(Team: Team?)
+        fun onClick(team: Team?)
     }
 
 }

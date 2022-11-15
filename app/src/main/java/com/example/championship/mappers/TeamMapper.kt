@@ -13,12 +13,15 @@ class TeamMapper {
             return teamList
         }
 
-        private fun mapTeamDTO(teamDTO: TeamDTO): Team {
+        fun mapTeamDTO(teamDTO: TeamDTO?): Team {
             return Team(
-                teamDTO.name,
-                teamDTO.logo,
-                teamDTO.badge,
-                teamDTO.teamId,
+                teamDTO?.name,
+                teamDTO?.banner,
+                teamDTO?.description,
+                teamDTO?.championship,
+                teamDTO?.logo,
+                teamDTO?.badge,
+                teamDTO?.teamId,
             )
         }
     }
