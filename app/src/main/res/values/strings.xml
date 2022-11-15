@@ -6,4 +6,5 @@
     <string name="team_banner">Team\'s banner</string>
     <string name="team_name">Team Name</string>
     <string name="country">Country</string>
+    <string name="search">search</string>
 </resources>

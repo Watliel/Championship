@@ -2,6 +2,7 @@ package com.example.championship.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -25,24 +26,28 @@ class LeagueListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         leagueListViewModel = ViewModelProvider(this)[LeagueListViewModel::class.java]
         leagueListActivityBinding = LeagueListActivityBinding.inflate(layoutInflater)
         setContentView(leagueListActivityBinding.root)
         toolbarListAct = findViewById(R.id.league_list_toolbar)
         toolbarListAct.title = ""
         setSupportActionBar(toolbarListAct)
+
         initRecyclerView()
         initRecyclerViewTeam()
         leagueListViewModel.getLeagues()
 
-        leagueAdapter.setItemClickListener(object: LeagueListAdapter.ItemClickListener{
+        toolbarListAct.setNavigationOnClickListener { onBackPressed() }
+
+        leagueAdapter.setItemClickListener(object : LeagueListAdapter.ItemClickListener {
             override fun onClick(league: League?) {
                 val leagueNameSelected = league?.name.toString().replace(" ", "_")
                 leagueListViewModel.geTeamsLeaguesByNames(leagueNameSelected)
             }
         })
 
-        teamAdapter.setItemClickListener(object: TeamListAdapter.ItemClickListener{
+        teamAdapter.setItemClickListener(object : TeamListAdapter.ItemClickListener {
             override fun onClick(team: Team?) {
                 val teamNameSelected = team?.name.toString().replace(" ", "_")
                 team?.let { leagueListViewModel.geTeamDetail(teamNameSelected) }
@@ -57,15 +62,21 @@ class LeagueListActivity : AppCompatActivity() {
             leagues?.let { leagueAdapter.updateLeagueList(it) }
         })
         leagueListViewModel.loading.observe(this, Observer { isLoading ->
-            isLoading?.let { leagueListActivityBinding.leagueListLoading.visibility = if(it) View.VISIBLE else View.GONE }
+            isLoading?.let {
+                leagueListActivityBinding.leagueListLoading.visibility =
+                    if (it) View.VISIBLE else View.GONE
+            }
         })
         leagueListViewModel.leagueLoadError.observe(this, Observer { isError ->
-            isError?.let { leagueListActivityBinding.leagueListOnError.visibility = if(it) View.VISIBLE else View.GONE }
+            isError?.let {
+                leagueListActivityBinding.leagueListOnError.visibility =
+                    if (it) View.VISIBLE else View.GONE
+            }
         })
         leagueListViewModel.teamsInLeague.observe(this, Observer { teams ->
             teams?.let {
-                leagueListActivityBinding.leagueListSearchView.visibility = View.GONE
-                // toolbarListAct.menu.getItem(R.id.toolbar_menu_back).isVisible = true
+                invalidateOptionsMenu()
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 leagueListActivityBinding.leagueListRecyclerView.adapter = teamAdapter
                 teamAdapter.updateTeamList(it)
             }
@@ -77,25 +88,29 @@ class LeagueListActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        leagueListActivityBinding.leagueListRecyclerView.layoutManager = GridLayoutManager(this@LeagueListActivity, 2)
+        leagueListActivityBinding.leagueListRecyclerView.layoutManager =
+            GridLayoutManager(this@LeagueListActivity, 2)
         leagueAdapter = LeagueListAdapter()
         leagueListActivityBinding.leagueListRecyclerView.adapter = leagueAdapter;
     }
 
     private fun initRecyclerViewTeam() {
-        leagueListActivityBinding.leagueListRecyclerView.layoutManager = GridLayoutManager(this@LeagueListActivity, 2)
+        leagueListActivityBinding.leagueListRecyclerView.layoutManager =
+            GridLayoutManager(this@LeagueListActivity, 2)
         teamAdapter = TeamListAdapter()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
-        return super.onCreateOptionsMenu(menu)
+        val searchItem = menu!!.findItem(R.id.toolbar_menu_search)
+        searchItem.isVisible = leagueListActivityBinding.leagueListRecyclerView.adapter is LeagueListAdapter
+        return true
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.toolbar_menu_back -> {
-                onBackPressed()
+            R.id.toolbar_menu_search -> {
                 return true
             }
         }
@@ -103,7 +118,8 @@ class LeagueListActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        leagueListActivityBinding.leagueListSearchView.visibility = View.VISIBLE
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        invalidateOptionsMenu()
         leagueListActivityBinding.leagueListRecyclerView.adapter = leagueAdapter;
     }
 

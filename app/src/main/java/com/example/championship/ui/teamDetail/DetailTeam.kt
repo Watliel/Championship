@@ -1,16 +1,12 @@
 package com.example.championship.ui.teamDetail
 
-import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
+
 import com.example.championship.R
 import com.example.championship.databinding.ActivityDetailTeamBinding
 import com.example.championship.models.OneTeam
@@ -31,7 +27,10 @@ class DetailTeam : AppCompatActivity() {
         toolbarDetailTeam = findViewById(R.id.detail_team_toolbar)
         toolbarDetailTeam.title = OneTeam.team.name
         toolbarDetailTeam.title
+
         setSupportActionBar(toolbarDetailTeam)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         setTeamDetail()
     }
 
@@ -46,4 +45,5 @@ class DetailTeam : AppCompatActivity() {
             .error(R.drawable.ic_launcher_background)
             .into(detailTeamBinding.detailTeamBanner)
     }
+
 }

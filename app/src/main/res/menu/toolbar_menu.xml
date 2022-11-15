@@ -2,9 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/toolbar_menu_back"
-        android:title="@string/toolbar_back"
-        android:icon="@drawable/ic_arrow_back"
-        android:visible="false"
-        app:showAsAction="always|withText" />
+        android:id="@+id/toolbar_menu_search"
+        android:title="@string/search"
+        android:icon="@drawable/ic_baseline_search_24"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
 </menu>

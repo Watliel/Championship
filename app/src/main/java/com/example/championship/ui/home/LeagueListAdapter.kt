@@ -65,6 +65,7 @@ class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder
                          return false
                      }
                  })
+                 .fallback(R.drawable.ic_launcher_foreground)
                  .into(holder.leagueLogo)
 
         holder.itemView.setOnClickListener {
