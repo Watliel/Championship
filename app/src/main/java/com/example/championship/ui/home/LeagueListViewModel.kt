@@ -18,6 +18,7 @@ class LeagueListViewModel: ViewModel() {
     var allLeagues = MutableLiveData<List<League>>()
     var teamsInLeague = MutableLiveData<List<Team>>()
     var leagueFiltered: MutableList<League?> = ArrayList()
+    var suggestionLeagueList:  MutableList<String> = ArrayList<String>()
 
 
     var loading = MutableLiveData<Boolean>()
@@ -37,24 +38,24 @@ class LeagueListViewModel: ViewModel() {
                     allLeagues.value = LeagueMapper.mapLeagueDTOList(res.body()?.leagues)
                 } else {
                     onError("Error: ${res.message()}")
-                    Log.d("ERROR - LieagueList", res.message())
+                    Log.d("ERROR - LeagueList", res.message())
                 }
             }
         }
     }
 
-    fun geTeamsLeaguesByNames(name: String) {
+    fun geTeamsByLeagueNames(name: String) {
         loading.value = true
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val res = NetworkProvider.buildService(TeamService::class.java).getTeamsByLeagueName(name)
             withContext(Dispatchers.Main) {
                 loading.value = false
-                if (res.isSuccessful) {
+                if (res.isSuccessful && res.body()?.teams != null) {
                     val teams = TeamMapper.mapTeamDTOList(res.body()?.teams)
                    teamsInLeague.value = teams.filterIndexed { index, _ -> index % 2 == 0 }.sortedByDescending { it.name }
                 } else {
                     onError("Error: ${res.message()}")
-                    Log.d("ERROR - LeagueList", res.message())
+                    Log.d("ERROR - LeagueList", res.message() + "TEAM ISSE")
                 }
             }
         }
@@ -68,8 +69,11 @@ class LeagueListViewModel: ViewModel() {
                 loading.value = false
                 if (res.isSuccessful) {
                     val team = res.body()?.teams?.get(0)
-                    OneTeam.team = TeamMapper.mapTeamDTO(team)
-                    teamDetailLoaded.value = true
+                    if (team != null) {
+                        OneTeam.team = TeamMapper.mapTeamDTO(team)
+                        teamDetailLoaded.value = true
+                    } else onError("Team_detail null")
+
                 } else {
                     onError("Error: ${res.message()}")
                     Log.d("ERROR - geTeamDetail", res.message())

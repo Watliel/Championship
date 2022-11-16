@@ -40,7 +40,7 @@ class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder
         }
              Glide.with(holder.leagueLogo)
                  .load(logoToDisplay)
-                 .error(R.drawable.ic_launcher_background)
+                 .error(R.drawable.ic_no_image_provided)
                  .listener(object : RequestListener<Drawable?> {
                      override fun onLoadFailed(
                          e: GlideException?, model: Any?,
@@ -61,7 +61,7 @@ class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder
                          return false
                      }
                  })
-                 .fallback(R.drawable.ic_launcher_foreground)
+                 .fallback(R.drawable.ic_no_image_provided)
                  .into(holder.leagueLogo)
 
         holder.itemView.setOnClickListener {
