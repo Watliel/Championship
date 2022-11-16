@@ -1,5 +1,4 @@
 package com.example.championship.ui.home
-
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,8 +24,8 @@ class LeagueListViewModel: ViewModel() {
     var leagueLoadError = MutableLiveData<Boolean>()
     var teamDetailLoaded = MutableLiveData<Boolean>()
 
-    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable -> onError("Exception ${throwable.localizedMessage}") }
-    var job: Job? = null
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable -> onError("Exception ${throwable.localizedMessage}") }
+    private var job: Job? = null
 
     fun getLeagues() {
         loading.value = true
@@ -55,7 +54,7 @@ class LeagueListViewModel: ViewModel() {
                    teamsInLeague.value = teams.filterIndexed { index, _ -> index % 2 == 0 }.sortedByDescending { it.name }
                 } else {
                     onError("Error: ${res.message()}")
-                    Log.d("ERROR - LeagueList", res.message() + "TEAM ISSE")
+                    Log.d("ERROR - LeagueList", res.message())
                 }
             }
         }

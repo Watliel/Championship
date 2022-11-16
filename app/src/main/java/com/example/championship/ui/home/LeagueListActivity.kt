@@ -2,12 +2,15 @@ package com.example.championship.ui.home
 
 import android.annotation.SuppressLint
 import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.database.MatrixCursor
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.provider.BaseColumns
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -51,15 +54,23 @@ class LeagueListActivity : AppCompatActivity() {
 
         leagueAdapter.setItemClickListener(object : LeagueListAdapter.ItemClickListener {
             override fun onClick(league: League?) {
-                val leagueNameSelected = league?.name.toString().replace(" ", "_")
-                leagueListViewModel.geTeamsByLeagueNames(leagueNameSelected)
+                if (checkForInternet(this@LeagueListActivity)) {
+                    val leagueNameSelected = league?.name.toString().replace(" ", "_")
+                    leagueListViewModel.geTeamsByLeagueNames(leagueNameSelected)
+                } else {
+                    makeSnackBar("No Internet connexion")
+                }
             }
         })
 
         teamAdapter.setItemClickListener(object : TeamListAdapter.ItemClickListener {
             override fun onClick(team: Team?) {
-                val teamNameSelected = team?.name.toString().replace(" ", "_")
-                team?.let { leagueListViewModel.geTeamDetail(teamNameSelected) }
+                if (checkForInternet(this@LeagueListActivity)) {
+                    val teamNameSelected = team?.name.toString().replace(" ", "_")
+                    team?.let { leagueListViewModel.geTeamDetail(teamNameSelected) }
+                } else {
+                    makeSnackBar("No Internet connexion")
+                }
             }
         })
 
@@ -82,10 +93,7 @@ class LeagueListActivity : AppCompatActivity() {
         }
         leagueListViewModel.leagueLoadError.observe(this) { isError ->
             isError?.let {
-                val snack = Snackbar.make(leagueListActivityBinding.leagueListView, "An error occurred", Snackbar.LENGTH_SHORT)
-                snack.show()
-                /*leagueListActivityBinding.leagueListOnError.visibility =
-                    if (it) View.VISIBLE else View.GONE*/
+                makeSnackBar("An error occurred")
             }
         }
         leagueListViewModel.teamsInLeague.observe(this) { teams ->
@@ -199,6 +207,28 @@ class LeagueListActivity : AppCompatActivity() {
                 return false
             }
         })
+    }
+
+    private fun checkForInternet(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+    }
+
+    private fun makeSnackBar(message: String) {
+        Snackbar.make(leagueListActivityBinding.leagueListView, message, Snackbar.LENGTH_SHORT).show()
     }
 
 }
