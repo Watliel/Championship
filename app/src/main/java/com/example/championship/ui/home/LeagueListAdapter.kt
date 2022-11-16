@@ -1,12 +1,9 @@
 package com.example.championship.ui.home
 
-import android.graphics.BlurMaskFilter
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.ProgressBar
 
@@ -15,15 +12,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.example.championship.R
 import com.example.championship.models.League
 import java.util.ArrayList
 
-class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder>(), Filterable {
-    private var allLeagues: MutableList<League?> = ArrayList<League?>()
-    private var leaguesFiltered: MutableList<League?> = ArrayList<League?>()
+class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder>() {
+    var allLeagues: MutableList<League?> = ArrayList<League?>()
+    var leaguesFiltered: MutableList<League?> = ArrayList<League?>()
 
     private lateinit var itemClickListener: ItemClickListener
 
@@ -37,10 +33,10 @@ class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder
     }
 
     override fun onBindViewHolder(holder: LeagueListAdapter.LeagueViewHolder, position: Int) {
-        val logoToDisplay = if (allLeagues[position]?.logo != null ) {
-            allLeagues[position]?.logo.toString()
+        val logoToDisplay = if (leaguesFiltered[position]?.logo != null ) {
+            leaguesFiltered[position]?.logo.toString()
         } else {
-            allLeagues[position]?.badge.toString()
+            leaguesFiltered[position]?.badge.toString()
         }
              Glide.with(holder.leagueLogo)
                  .load(logoToDisplay)
@@ -77,7 +73,7 @@ class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder
     }
 
     override fun getItemCount(): Int {
-        return allLeagues.size
+        return leaguesFiltered.size
     }
 
 
@@ -98,32 +94,6 @@ class LeagueListAdapter: RecyclerView.Adapter<LeagueListAdapter.LeagueViewHolder
         this.allLeagues = leagueList as MutableList<League?>
         this.leaguesFiltered = leagueList
         notifyDataSetChanged()
-    }
-
-    override fun getFilter(): Filter {
-        return object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charString = constraint?.toString() ?: ""
-                leaguesFiltered = if (charString.isEmpty()) allLeagues else {
-                    val filteredList = ArrayList<League?>()
-                    allLeagues
-                        .filter {
-                            (it?.name?.contains(constraint!!)!!)
-                        }
-                        .forEach { filteredList.add(it) }
-                    filteredList
-                }
-                return FilterResults().apply { values = leaguesFiltered }
-            }
-
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                leaguesFiltered = if (results?.values == null)
-                    ArrayList()
-                else
-                    results.values as MutableList<League?>
-                notifyDataSetChanged()
-            }
-        }
     }
 
     fun setItemClickListener(itemClickListener: ItemClickListener) {

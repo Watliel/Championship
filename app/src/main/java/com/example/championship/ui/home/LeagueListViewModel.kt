@@ -12,10 +12,13 @@ import com.example.championship.services.LeagueService
 import com.example.championship.services.NetworkProvider
 import com.example.championship.services.TeamService
 import kotlinx.coroutines.*
+import java.util.ArrayList
 
 class LeagueListViewModel: ViewModel() {
     var allLeagues = MutableLiveData<List<League>>()
     var teamsInLeague = MutableLiveData<List<Team>>()
+    var leagueFiltered: MutableList<League?> = ArrayList()
+
 
     var loading = MutableLiveData<Boolean>()
     var leagueLoadError = MutableLiveData<Boolean>()

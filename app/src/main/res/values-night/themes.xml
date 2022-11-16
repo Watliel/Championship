@@ -11,12 +11,18 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >#2196F3</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:text" >#2196F3</item>
 
 
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.toolbar" parent="Widget.AppCompat.Toolbar">
+    <style name="Theme.toolbar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor" >#2196F3</item>
+    </style>
+
+    <style name="textColor" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:text" >#2196F3</item>
     </style>
 </resources>

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="#55ABEF"
     android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar"
-    app:titleTextColor="@color/teal_200"
+    app:titleTextColor="@color/white"
     app:title=""
     app:titleCentered="true"
     app:popupTheme="@style/Theme.toolbar">
