@@ -38,7 +38,7 @@ class TeamListAdapter : RecyclerView.Adapter<TeamListAdapter.TeamViewHolder>() {
         }
         Glide.with(holder.teamLogo)
             .load(logoToDisplay)
-            .error(R.drawable.ic_launcher_background)
+            .error(R.drawable.ic_no_image_provided)
             .listener(object : RequestListener<Drawable?> {
                 override fun onLoadFailed(
                     e: GlideException?, model: Any?,
