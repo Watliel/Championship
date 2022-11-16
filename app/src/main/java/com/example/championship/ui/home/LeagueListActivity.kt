@@ -25,6 +25,8 @@ import com.example.championship.R
 import com.example.championship.databinding.LeagueListActivityBinding
 import com.example.championship.models.League
 import com.example.championship.models.Team
+import com.example.championship.services.NetworkStatus
+import com.example.championship.services.NetworkStatusListener
 import com.example.championship.ui.teamDetail.DetailTeam
 import com.google.android.material.snackbar.Snackbar
 
@@ -48,7 +50,11 @@ class LeagueListActivity : AppCompatActivity() {
 
         initRecyclerView()
         initRecyclerViewTeam()
-        leagueListViewModel.getLeagues()
+        if (checkForInternet(this@LeagueListActivity)) {
+            leagueListViewModel.getLeagues()
+        } else {
+            makeSnackBar("No Internet connexion")
+        }
 
         toolbarListAct.setNavigationOnClickListener { onBackPressed() }
 
@@ -75,6 +81,19 @@ class LeagueListActivity : AppCompatActivity() {
         })
 
         observeViewModel()
+        internetListener()
+    }
+
+    private fun internetListener() {
+        NetworkStatusListener(this).observe(this) {
+            when(it){
+                NetworkStatus.Available -> {
+                    makeSnackBar("Network Connection Established")
+                    if (leagueListViewModel.leagueFiltered.isEmpty())leagueListViewModel.getLeagues()
+                }
+                NetworkStatus.Unavailable -> makeSnackBar("No Internet connexion")
+            }
+        }
     }
 
     private fun observeViewModel() {
